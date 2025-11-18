@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  name      String?
+  password  String
+  image     String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  
+  contacts  Contact[]
+  activities ActivityLog[]
+  
+  @@index([email])
+  @@map("users")
+}
+
+model Contact {
+  id          String   @id @default(cuid())
+  userId      String
+  timestamp   DateTime @default(now())
+  companyName String   @db.VarChar(255)
+  phone1      String?  @db.VarChar(20)
+  phone2      String?  @db.VarChar(20)
+  phone3      String?  @db.VarChar(20)
+  email       String?  @db.VarChar(255)
+  website     String?  @db.VarChar(255)
+  address     String?  @db.Text
+  note        String?  @db.Text
+  sent        Boolean  @default(false)
+  rawText     String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activities  ActivityLog[]
+  
+  @@index([userId])
+  @@index([createdAt])
+  @@index([sent])
+  @@map("contacts")
+}
+
+model ActivityLog {
+  id          String   @id @default(cuid())
+  userId      String
+  contactId   String?
+  action      String   @db.VarChar(50) // 'created', 'updated', 'deleted', 'exported', 'uploaded'
+  description String?  @db.Text
+  metadata    String?  @db.Text // JSON string for additional data
+  createdAt   DateTime @default(now())
+  
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contact     Contact? @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([contactId])
+  @@index([createdAt])
+  @@index([action])
+  @@map("activity_logs")
+}
+
