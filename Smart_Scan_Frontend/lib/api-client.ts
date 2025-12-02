@@ -11,7 +11,9 @@ export function setToken(token: string): void {
   if (typeof window === 'undefined') return;
   localStorage.setItem('auth_token', token);
   // Also set in cookie for middleware
-  document.cookie = `auth_token=${token}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax`;
+  const expires = new Date();
+  expires.setTime(expires.getTime() + 7 * 24 * 60 * 60 * 1000); // 7 days
+  document.cookie = `auth_token=${token}; path=/; expires=${expires.toUTCString()}; SameSite=Lax; Secure=${window.location.protocol === 'https:'}`;
 }
 
 // Remove token from localStorage and cookie

@@ -72,6 +72,7 @@ export function FileUpload() {
         newContacts[index] = data.contact;
         return newContacts;
       });
+      setExpandedIndex(index); // Expand by default
       toast.success('Contact extracted successfully!');
     } catch (error: any) {
       console.error('Upload error:', error);
@@ -185,6 +186,7 @@ export function FileUpload() {
       }
 
       setExtractedContacts([data.contact]);
+      setExpandedIndex(0); // Expand by default
       toast.success('Contact extracted successfully from both sides!');
     } catch (error: any) {
       console.error('Upload error:', error);
@@ -259,12 +261,14 @@ export function FileUpload() {
       // Update the extracted contacts
       if (uploadMode === 'both') {
         setExtractedContacts([data.contact]);
+        setExpandedIndex(0); // Expand by default
       } else {
         setExtractedContacts((prev) => {
           const newContacts = [...prev];
           newContacts[duplicateInfo.index] = data.contact;
           return newContacts;
         });
+        setExpandedIndex(duplicateInfo.index); // Expand by default
       }
 
       setDuplicateInfo(null);

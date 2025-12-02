@@ -14,6 +14,25 @@ export default function DashboardLayout({
   const { user, loading } = useAuth();
   const router = useRouter();
 
+  // Ensure cookie is set from localStorage on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('auth_token');
+      if (token) {
+        // Ensure cookie is set for middleware
+        const cookieToken = document.cookie
+          .split('; ')
+          .find(row => row.startsWith('auth_token='))
+          ?.split('=')[1];
+        if (!cookieToken || cookieToken !== token) {
+          const expires = new Date();
+          expires.setTime(expires.getTime() + 7 * 24 * 60 * 60 * 1000);
+          document.cookie = `auth_token=${token}; path=/; expires=${expires.toUTCString()}; SameSite=Lax; Secure=${window.location.protocol === 'https:'}`;
+        }
+      }
+    }
+  }, []);
+
   useEffect(() => {
     if (!loading && !user) {
       router.push('/login');

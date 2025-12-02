@@ -80,16 +80,11 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {/* Smart Workflow Card */}
         <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm bg-white dark:bg-slate-800 flex flex-col">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-5">
-            <div>
-              <h3 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-slate-100">Smart Workflow</h3>
-              <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">
-                Automate the lifecycle of every visiting card you capture.
-              </p>
-            </div>
-            <span className="inline-flex items-center text-xs font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 px-2 sm:px-3 py-1 rounded-full whitespace-nowrap">
-              Live pipeline
-            </span>
+          <div className="mb-4 sm:mb-5">
+            <h3 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-slate-100">Smart Workflow</h3>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">
+              Automate the lifecycle of every visiting card you capture.
+            </p>
           </div>
           <div className="space-y-3 flex-1">
             {workflowSteps.map((step) => {

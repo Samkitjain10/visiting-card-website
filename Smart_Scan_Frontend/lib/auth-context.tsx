@@ -40,7 +40,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             ?.split('=')[1];
           if (!cookieToken || cookieToken !== token) {
             // Set cookie if missing or different
-            document.cookie = `auth_token=${token}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax`;
+            const expires = new Date();
+            expires.setTime(expires.getTime() + 7 * 24 * 60 * 60 * 1000); // 7 days
+            document.cookie = `auth_token=${token}; path=/; expires=${expires.toUTCString()}; SameSite=Lax; Secure=${window.location.protocol === 'https:'}`;
           }
         }
         try {
@@ -63,7 +65,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setToken(data.token);
     // Also set token in cookie for middleware
     if (typeof document !== 'undefined') {
-      document.cookie = `auth_token=${data.token}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax`;
+      // Set cookie with proper attributes for cross-page navigation
+      const expires = new Date();
+      expires.setTime(expires.getTime() + 7 * 24 * 60 * 60 * 1000); // 7 days
+      document.cookie = `auth_token=${data.token}; path=/; expires=${expires.toUTCString()}; SameSite=Lax; Secure=${window.location.protocol === 'https:'}`;
     }
     setUser(data.user);
     router.push('/');
